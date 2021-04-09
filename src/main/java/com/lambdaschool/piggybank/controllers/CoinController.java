@@ -14,13 +14,12 @@ public class CoinController {
 
     @GetMapping(value = "/total", produces = "application/json")
     public ResponseEntity<?> getCoinsTotal() {
-        final double[] coinsTotal = {0.0};
         coinRepository.findAll().iterator().forEachRemaining(coin -> {
-            coinsTotal[0] += coin.getValue() * coin.getQuantity();
-            System.out.println(coin.getQuantity() + " " + coin.getName());
+            System.out.println(CoinUtils.getDisplayString(coin));
         });
-        System.out.println("The piggy bank holds " + coinsTotal[0]);
 
+        double total = CoinUtils.getTotal(coinRepository.findAll().iterator());
+        System.out.println("The piggy bank holds " + total);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
